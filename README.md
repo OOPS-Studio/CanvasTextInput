@@ -6,9 +6,60 @@ There was a library by Goldfire which attempted to accomplish the same thing my 
 
 ## Getting setup
 
-Getting CanvasTextInput setup in your project is incredibly simple.
+Getting CanvasTextInput setup in your project is incredibly simple. The entire library exists inside of [one single file](https://github.com/OOPS-Studio/CanvasTextInput/blob/main/canvastextinput.js). You're free to copy the contents of that file into a file of your own and import and use that, however you can also use JSDelivr like so:
+```
+<script src="https://cdn.jsdelivr.net/gh/OOPS-Studio/CanvasTextInput/canvastextinput.js"></script>
+```
+or, for a minified version:
+```
+<script src="https://cdn.jsdelivr.net/gh/OOPS-Studio/CanvasTextInput/canvastextinput.min.js"></script>
+```
 
+Once you have Canvas Text Input imported, you can get a simple demo running like so:
+```
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas Text Input Demo</title>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/gh/OOPS-Studio/CanvasTextInput/canvastextinput.min.js"></script>
+        
+        <canvas id = "output-canvas" width = "250" height = "120"></canvas>
+        
+        <script>
+            let canvas = document.getElementById("output-canvas");
+            let ctx = canvas.getContext("2d");
 
-### I will give a rundown of the different features, along with some documentation below:
+            let mouseX = 0;
+            let mouseY = 0;
+            let hover = false;
 
+            let input = new TextInput(canvas,ctx,50,50);
 
+            setInterval(function(){
+                ctx.fillStyle = "red";
+                ctx.fillRect(0,0,400,400);
+
+                input.render();
+
+                if(!hover && !TextInput.requestingHover){
+                    document.body.style.cursor = "default";
+                }
+                hover = false;
+                mouseClicked = false;
+                TextInput.nextFrame();
+            },1000 / 60);
+
+            canvas.addEventListener("mousemove",e => {
+                let rect = e.target.getBoundingClientRect();
+                TextInput.giveMouseData(Math.round(e.clientX - rect.left),Math.round(e.clientY - rect.top));
+            });
+        </script>
+    </body>
+</html>
+```
+
+## Feature rundow/Documentation
+
+Once you have Canvas Text Input setup in your project it's very simple to use.
