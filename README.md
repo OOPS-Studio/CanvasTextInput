@@ -31,9 +31,11 @@ Once you have Canvas Text Input imported, you can get a simple demo running like
             let canvas = document.getElementById("output-canvas");
             let ctx = canvas.getContext("2d");
 
+            TextInput.setCanvas(canvas);
+            
             let hover = false;
 
-            let input = new TextInput(canvas,ctx,50,50);
+            let input = new TextInput(50,50);
 
             setInterval(function(){
                 ctx.fillStyle = "red";
@@ -66,7 +68,7 @@ Once you have Canvas Text Input setup in your project it's very simple to use. L
 
 Canvas Text Input requires a bit of one-time setup to make sure that it's in-sync with everything else you have going on inside your project. Let's walk through customizing Canvas Text Input to your specific project to ensure that it runs perfectly seamlessly at all times.
 
-First, you'll need to tell each input element which canvas you want it to run on. You can
+First, you'll need to tell the library what canvas you want it to render to and run on.
 
 
 
