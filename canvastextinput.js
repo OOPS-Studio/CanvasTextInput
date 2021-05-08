@@ -6,6 +6,10 @@ class TextInput{
     static mouseMoved = false;
     static holdingShift = false;
     static holdingControl = false;
+    static ctx = undefined;
+    static setCanvas(canvas){
+        TextInput.ctx = canvas.getContext("2d");
+    }
     static giveMouseData(x,y){
         TextInput.mouseX = x;
         TextInput.mouseY = y;
@@ -49,9 +53,8 @@ class TextInput{
         ctx.arcTo(x,y,x + r1,y,r1);
         ctx.closePath();
     }
-    constructor(canvas,ctx,x,y,style = {}){
-        this.canvas = canvas;
-        this.ctx = ctx;
+    constructor(x,y,style = {}){
+        this.ctx = TextInput.ctx;
         
         this.x = x;
         this.y = y;
