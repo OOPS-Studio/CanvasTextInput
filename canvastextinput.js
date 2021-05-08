@@ -72,7 +72,7 @@ class TextInput{
         this.alignScroll = undefined;
         this.lastRendered = 0;
         
-        this.placeholder = "Testing";
+        this.placeholder = "";
         this.highlightAllTextWhenSelected = false;
         
         this.style = {
