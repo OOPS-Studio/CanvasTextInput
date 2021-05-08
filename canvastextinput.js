@@ -1,19 +1,9 @@
 class TextInput{
-    static mouseX = 0;
-    static mouseY = 0;
     static mouseClicked = false;
     static mousePressed = false;
     static mouseMoved = false;
     static holdingShift = false;
     static holdingControl = false;
-    static ctx = undefined;
-    static setCanvas(canvas){
-        TextInput.ctx = canvas.getContext("2d");
-    }
-    static giveMouseData(x,y){
-        TextInput.mouseX = x;
-        TextInput.mouseY = y;
-    }
     static requestingHover = false;
     static nextFrame(){
         TextInput.requestingHover = false;
@@ -53,14 +43,17 @@ class TextInput{
         ctx.arcTo(x,y,x + r1,y,r1);
         ctx.closePath();
     }
-    constructor(x,y,style = {}){
-        this.ctx = TextInput.ctx;
+    constructor(canvas,x,y,style = {}){
+        this.ctx = canvas.getContext("2d");
         
         this.x = x;
         this.y = y;
         this.width = 150;
         this.height = 0;
         this.textSize = 15;
+        
+        this.mouseX = 0;
+        this.mouseY = 0;
         
         this.selected = false;
         this.value = "";
@@ -148,6 +141,12 @@ class TextInput{
                 return;
             }
             TextInput.mouseMoved = true;
+        });
+        
+        canvas.addEventListener("mousemove",e => {
+            let rect = e.target.getBoundingClientRect();
+            this.mouseX = Math.round(e.clientX - rect.left)
+            this.mouseY = Math.round(e.clientY - rect.top);
         });
     }
     setValue(newValue){
@@ -391,7 +390,7 @@ class TextInput{
         }else{
             if(TextInput.mousePressed){
                 let insertingX = this.ctx.measureText(this.value.substring(0,this.highlighting[1])).width;
-                if(TextInput.mouseX < this.x + this.width / 2){
+                if(this.mouseX < this.x + this.width / 2){
                     if(insertingX < this.scroll){
                         this.scroll = insertingX;
                     }
@@ -501,7 +500,7 @@ class TextInput{
                     this.ctx.save();
                     this.ctx.font = this.textSize + "px sans-serif";
                     let w = this.ctx.measureText(this.value).width;
-                    let xin = (TextInput.mouseX - this.x - this.textSize * 0.1) + this.scroll;
+                    let xin = (this.mouseX - this.x - this.textSize * 0.1) + this.scroll;
                     if(xin > w){
                         this.insertingAt = this.value.length;
                     }else if(xin <= this.ctx.measureText(this.value.charAt(0)).width / 2){
@@ -550,7 +549,7 @@ class TextInput{
             this.ctx.save();
             this.ctx.font = this.textSize + "px sans-serif";
             let w = this.ctx.measureText(this.value).width;
-            let xin = (TextInput.mouseX - this.x - this.textSize * 0.1) + this.scroll;
+            let xin = (this.mouseX - this.x - this.textSize * 0.1) + this.scroll;
             if(xin > w){
                 this.highlighting[1] = this.value.length;
             }else if(xin <= this.ctx.measureText(this.value.charAt(0)).width / 2){
@@ -595,7 +594,7 @@ class TextInput{
         }
     }
     isMouseInside(){
-        return(TextInput.mouseX > this.x && TextInput.mouseX < this.x + this.width && TextInput.mouseY > this.y && TextInput.mouseY < this.y + this.height);
+        return(this.mouseX > this.x && this.mouseX < this.x + this.width && this.mouseY > this.y && this.mouseY < this.y + this.height);
     }
     onselect(){
         
