@@ -91,6 +91,57 @@ Once you have your Canvas Text Input created, go ahead and store it in a variabl
 
 Now let's render our input element! To render our Canvas Text Input, we simply need to call `input1.render();` every frame. When we want our input to stop rendering for any length of time, simply stop calling `.render()` on it and begin again when you'd like it to continue rendering.
 
+### How to style your Canvas Text Input
+
+There are two ways of controlling the style of your Canvas Text Input. One way is simply by including a "styling object" inside the constructor like so: `new TextInput(canvas,x,y,{/* This is the styling object */})` and another way is by calling `setStyle()` on your Canvas Text Input, like: `nameOfTextInput.setStyle({/* This is the styling object */});`
+
+A Canvas Text Input's style can be controlled simply by passing in keys with values. So, for example, the default text size is 15, if I wanted to set the text size of this TextInput to 30, I could simply say:
+```
+nameOfTextInput.setStyle({
+    textSize: 30
+});
+```
+or simply add it to the creation of the Canvas Text Input:
+```
+let nameOfTextInput = new TextInput(canvas,x,y,{
+    textSize: 30
+});
+```
+It's as simple as that. A full list of all the styling options and what they do can be found below under the "[will be filled in later]" header. For now, just know that this is how you set each individual value.
+
+### Creating multiple Canvas Text Inputs
+
+There is no limit to how many Canvas Text Inputs you can have at once. You can create as many as you'd like and control them each individually, even on seperate canvases (or all on one or two canvases too, the choice is absolutely yours). Simply call `.render()` on whichever Canvas Text Inputs you'd like to render at any given time and you're all set! You don't need to do any extra work to get as many of these running as you'd like. Just follow the same steps as above for each one.
+
+### Listening to events broadcast by your Canvas Text Inputs
+
+Each Canvas Text Input will broadcast events which allow you to keep track of what it's doing, such as when it's selected, when text is inputted into it, etc. A list of all the different events and what they mean and how to use them can be found under the "[will be filled in later]" header.
+
+### Miscellaneous other features
+
+There are two other things you can do with your Canvas Text Inputs. I wasn't sure where they really fit in, so here they are!
+
+#### Setting the placeholder of your Canvas Text Input
+
+You can set a placeholder by doing one of the following: You can either set it directly using `nameOfInputElement.placeholder = "";` or pass in `placeholder` as one of the styling options when passign in a styling object. Either way works just fine, you can mix and match them as well. Just use whichever is nicer for you at any given time.
+
+A placeholder is a small peice of text that displays when the Canvas Text Input is empty. It's exactly identacle to the `placeholder` attribute on an HTML input element, use it the same way you'd use that.
+
+#### You can also set an optional setting to automatically highlight all text in a Canvas Text Input when it's clicked
+
+To do so, simply set `highlightAllTextWhenSelected` to `true`. This can be done directly (`nameOfTextInput.highlightAllTextWhenSelected = true;`) or via the styling object. Again, the choice is yours.
+
+When set to true it will cause all text inside to be highlighted when the user clicks inside the Canvas Text Input. When set to false it will cause a insert bar to appear instead. Default is `false`.
+
+# Full documentation
+
+
+
+
+
+
+
+
 
 
 
