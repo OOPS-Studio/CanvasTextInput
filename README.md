@@ -18,7 +18,6 @@ or, for a minified version:
 Once you have Canvas Text Input imported, you can get a simple demo running like so:
 ```
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
     <head>
         <title>Canvas Text Input Demo</title>
@@ -63,7 +62,7 @@ You'll need to tell each input element which canvas that you would like it to re
 2. Clean up the mouse cursor after each frame.
 3. Clear the canvas render between frames
 
-To tell the class when a frame completes, simply use `TextInput.nextFrame();` at the very bottom of your main loop. This will reset it and make it ready for the next frame. (And example of this in use can be seen in the demo above)
+To tell the class when a frame completes, simply use `TextInput.nextFrame();` at the very bottom of your main loop. This will reset it and make it ready for the next frame. (An example of this in use can be seen in the demo above)
 
 To clean up the mouse cursor you simply need to check at the bottom of every frame whether or not you want to return the cursor to default or if you want to leave it as it is. (This prevents flicker) Odds are that you've already done this for your project by keeping track of a variable that tells you whether or not to reset the cursor, resetting that variable at the end of each frame. If so, then that's perfect! You can integrate that directly into Canvas Text Input with no extra work at all. In your if() statement that checks whether or not to reset the cursor, simply include a check for `!TextInput.requestingHover`, and this will prevent your code from automatically overwriting Canvas Text Input's request for a cursor change, removing any flicker.
 The reason you need to clean up the mouse cursor manually is because you may have other parts of your project affecting the mouse cursor, and this allows you to control when Canvas Text Input can and cannot mandate the style of the mouse cursor. If you don't affect the style of the cursor annywhere else in your entire project, then you can simply include the following block of code directly above your `TextInput.nextFrame()` call:
@@ -88,6 +87,9 @@ To create a new Canvas Text Input, use the `TextInput` constructor. The construc
 * `y` should be the y position that you want this Canvas Text Input to render at. (top edge)
 * `*style` is an optional argument. We'll look into this more later. All you need to know now is that you can pass in an object that defines the style of your Canvas Text Input. For now we'll leave it blank and let this Canvas Text Input render with default styling.
 
+Once you have your Canvas Text Input created, go ahead and store it in a variable. You can call this variable anything that you'd like, but in this little walkthrough I'll call mine `input1` by saying `let input1 = new TextInput(canvas,x,y);`
+
+Now let's render our input element! To render our Canvas Text Input, we simply need to call `input1.render();` every frame. When we want our input to stop rendering for any length of time, simply stop calling `.render()` on it and begin again when you'd like it to re-appear! It's that simple.
 
 
 
