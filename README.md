@@ -31,8 +31,6 @@ Once you have Canvas Text Input imported, you can get a simple demo running like
             let canvas = document.getElementById("output-canvas");
             let ctx = canvas.getContext("2d");
 
-            let mouseX = 0;
-            let mouseY = 0;
             let hover = false;
 
             let input = new TextInput(canvas,ctx,50,50);
@@ -62,4 +60,24 @@ Once you have Canvas Text Input imported, you can get a simple demo running like
 
 ## Feature rundow/Documentation
 
-Once you have Canvas Text Input setup in your project it's very simple to use.
+Once you have Canvas Text Input setup in your project it's very simple to use. Let's learn the basics and then we'll get into the big list of everything that it can do.
+
+### Setup a shell for all your inputs to run in.
+
+Canvas Text Input requires a bit of one-time setup to make sure that it's in-sync with everything else you have going on inside your project. Let's walk through customizing Canvas Text Input to your specific project to ensure that it runs perfectly seamlessly at all times.
+
+First, you'll need to tell each input element which canvas you want it to run on. You can
+
+
+
+
+
+
+
+
+
+
+
+
+
+
