@@ -135,6 +135,24 @@ When set to true it will cause all text inside to be highlighted when the user c
 
 # Full documentation
 
+## Techincal properties:
+* `.value`: Gets and sets the value of the text inside the Canvas Text Input.
+* `.selected`: Is `true` when the Canvas Text Input is selected (or "focused"), and `false` otherwise. Can be set manually to override.
+* `.highlightAllTextWhenSelected`: Is `false` by default, meaning that selecting the Canvas Text Input will create an insert marker. If set to `true`, selecting the Canvas Text Input will highlight all text inside.
+
+## Technical methods:
+* `.render()`: Renders the Canvas Text Input a single time. Needs to be called every frame to make Canvas Text Input work.
+* `.undo()`: Equivilent to the user pressing `ctrl + Z`
+* `.redo()`: Equivilent to the user pressing `ctrl + Y`
+
+## Styling properties:
+
+
+
+
+
+
+
 
 
 
