@@ -89,7 +89,13 @@ To create a new Canvas Text Input, use the `TextInput` constructor. The construc
 
 Once you have your Canvas Text Input created, go ahead and store it in a variable. You can call this variable anything that you'd like, but in this little walkthrough I'll call mine `input1` by saying `let input1 = new TextInput(canvas,x,y);`
 
-Now let's render our input element! To render our Canvas Text Input, we simply need to call `input1.render();` every frame. When we want our input to stop rendering for any length of time, simply stop calling `.render()` on it and begin again when you'd like it to re-appear! It's that simple.
+Now let's render our input element! To render our Canvas Text Input, we simply need to call `input1.render();` every frame. When we want our input to stop rendering for any length of time, simply stop calling `.render()` on it and begin again when you'd like it to continue rendering.
+
+
+
+
+
+
 
 
 
