@@ -9,7 +9,9 @@ class TextInput{
         TextInput.requestingHover = false;
         TextInput.mouseClicked = false;
         TextInput.mouseMoved = false;
+        TextInput.frameCounter++;
     }
+    static frameCounter = 0;
     static IGNORE_LIST = ["Control","Alt","Shift","Enter","Escape","CapsLock","Meta","PageUp","PageDown","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Home","End","Insert","Tab"];
     static restrain(val,min,max){
         return(val < min ? min : (val > max ? max : val));
@@ -68,6 +70,7 @@ class TextInput{
         
         this.scroll = 0;
         this.alignScroll = undefined;
+        this.lastRendered = 0;
         
         this.placeholder = "Testing";
         this.highlightAllTextWhenSelected = false;
@@ -101,14 +104,14 @@ class TextInput{
         this.setStyle(style);
         
         document.addEventListener("keydown",e => {
-            if(this.processingPaste){
-                return;
-            }
             if(e.key === "Shift"){
                 TextInput.holdingShift = true;
             }
             if(e.key === "Control"){
                 TextInput.holdingControl = true;
+            }
+            if(this.processingPaste || this.lastRendered !== TextInput.frameCounter){
+                return;
             }
             this.handleKeypress(e.key);
             if(this.selected){
@@ -122,7 +125,7 @@ class TextInput{
             if(e.key === "Control"){
                 TextInput.holdingControl = false;
             }
-            if(this.selected){
+            if(this.selected && this.lastRendered === TextInput.frameCounter){
                 this.onkeyrelease(e.key);
             }
         });
@@ -372,6 +375,11 @@ class TextInput{
         return(this.style.onSelect[style] === false ? this.style[style] : this.style.onSelect[style]);
     }
     render(){
+        if(this.lastRendered < TextInput.frameCounter - 1){
+            this.selected = false;
+        }
+        this.lastRendered = TextInput.frameCounter;
+        
         this.height = this.textSize * 1.1;
         
         this.ctx.save();
