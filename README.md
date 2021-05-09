@@ -147,8 +147,40 @@ When set to true it will cause all text inside to be highlighted when the user c
 
 ## Styling properties:
 
+Stying properties are properties that exist inside of the `.style` property of a Canvas Text Input. These properties can be set using the `.setStyle()` method, or by passing them in inside the 4th parameter of the constructor.
 
-
+A "styling object" is simply an object which contains key/value pairs that dictate the styling options of a Canvas Text Input. An example of a styling object is as below:
+```
+{
+	textSize: 20,
+	paddingLeft: 4,
+	paddingRight: 4,
+	borderRadius: 5,
+	width: 150,
+	onSelect: {
+		borderColor: "red",
+		borderWidth: 4
+	}
+}
+```
+A special property called `onSelect` can also take in an object which specifies special properties that will be used when the Canvas Text Input is selected. These properties can be set to `false` to make them automatically inherit the non-selected properties. For example, this code block will remove the default styling of the border turning blue when selected and cause the Canvas Text Input to appear identacle to its un-selected styling:
+```
+nameOfTextInput.setStyle({
+	onSelect: {
+		borderWidth: false,
+		borderColor: false
+	}
+});
+```
+And this block of code will make the background color be green when not selected, and turn red when selected:
+```
+nameOfTextInput.setStyle({
+	backgroundColor: "green",
+	onSelect: {
+		backgroundColor: "red"
+	}
+});
+```
 
 
 
