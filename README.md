@@ -107,7 +107,7 @@ let nameOfTextInput = new TextInput(canvas,x,y,{
     textSize: 30
 });
 ```
-It's as simple as that. A full list of all the styling options and what they do can be found below under the "[will be filled in later]" header. For now, just know that this is how you set each individual value.
+It's as simple as that. A full list of all the styling options and what they do can be found below under the "**Styling properties**" header. For now, just know that this is how you set each individual value.
 
 ### Creating multiple Canvas Text Inputs
 
@@ -115,7 +115,7 @@ There is no limit to how many Canvas Text Inputs you can have at once. You can c
 
 ### Listening to events broadcast by your Canvas Text Inputs
 
-Each Canvas Text Input will broadcast events which allow you to keep track of what it's doing, such as when it's selected, when text is inputted into it, etc. A list of all the different events and what they mean and how to use them can be found under the "[will be filled in later]" header.
+Each Canvas Text Input will broadcast events which allow you to keep track of what it's doing, such as when it's selected, when text is inputted into it, etc. A list of all the different events and what they mean and how to use them can be found under the "**Events. What they do and how to use them**" header.
 
 ### Miscellaneous other features
 
