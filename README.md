@@ -182,12 +182,32 @@ nameOfTextInput.setStyle({
 });
 ```
 
+### All possible styling properties and their effects:
 
+`width` - Default: `150` - The width (in pixels) of the entire text box. (Excluding padding)
+`placeholder` - Default `""` - The text that will display when the Canvas Text Input has no user-inputted text inside it.
+`backgroundColor` - Default: `"white"` - The color of the inside of the Canvas Text Input box.
+`textColor` - Default: `"black"` - The color of the user-inputted text.
+`borderColor` - Default: `"black"` - The color of the border of the Canvas Text Input box.
+`borderWidth` - Default: `2` - The width, in pixels, of the border of the Canvas Text Input box.
+`borderRadius` - Default: `0` - The radius (or "curve") of the corners of the Canvas Text Input box.
+`placeholderColor` - Default: `rgba(0,0,0,0.65)` - The color of the placeholder text that displays when the Canvas Text Input box has no text in it. This placeholder's text can be specified by `placeholder`
+`highlightColor` - Default: `rgb(60,100,255)` - The color of the background of highlighted text inside the Canvas Text Input. Defaults to a strong blue color.
+`highlightedTextColor` - Default: `"white"` - The color of the text being highlighted. Defaults to white to provide high contrast with the blue background.
+`paddingLeft`, `paddingRight`, `paddingTop`, and `padddingBottom` - Default: `0` (all of them default to 0) - The amount of padding (in pixels) that will be between the border of the Canvas Text Input box and the text inside it. One value for each side. (Each one can be set to any number, and you can specify any amount of them without affecting the others.)
 
+#### Styling properties that can be used `onSelect`
 
+The following are all of the properites that can be passed to `onSelect`. They behave exactly the same as their counterparts above, however these only apply when the Canvas Text Input is selected.
 
+Setting any of these to `false` causes it to have no effect.
 
-
+`backgroundColor` - Default: `false`
+`textColor` - Default: `false`
+`borderColor` - Default: `"rgb(0,150,255)"`
+`borderWidth` - Default: `2.5`
+`borderRadius` - Default: `false`
+`paddingLeft`, `paddingRight`, `paddingTop`, and `padddingBottom` - Default: `false` (all of them default to `false`)
 
 
 
