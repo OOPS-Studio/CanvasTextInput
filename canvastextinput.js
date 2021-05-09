@@ -110,7 +110,7 @@ class TextInput{
             if(e.key === "Control"){
                 TextInput.holdingControl = true;
             }
-            if(this.processingPaste || this.lastRendered !== TextInput.frameCounter){
+            if(this.processingPaste || this.lastRendered < TextInput.frameCounter - 1){
                 return;
             }
             this.handleKeypress(e.key);
@@ -125,7 +125,7 @@ class TextInput{
             if(e.key === "Control"){
                 TextInput.holdingControl = false;
             }
-            if(this.selected && this.lastRendered === TextInput.frameCounter){
+            if(this.selected && this.lastRendered < TextInput.frameCounter - 1){
                 this.onkeyrelease(e.key);
             }
         });
