@@ -209,6 +209,8 @@ Setting any of these to `false` causes it to have no effect.
 * `borderRadius` - Default: `false`
 * `paddingLeft`, `paddingRight`, `paddingTop`, and `paddingBottom` - Default: `false` (all of them default to `false`)
 
+### You can see a demo of some of the ways you can style your Canvas Text Inputs by going [here](http://oops-studio.com/canvastextinputdemo).
+
 ## Events. What they do and how to use them
 
 Each Canvas Text Input broacasts its own events which tell you what it's doing and when, and allows you to write code that reacts to what it's doing. For example, processing user input when the user presses the `enter` key.
