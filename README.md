@@ -209,17 +209,32 @@ Setting any of these to `false` causes it to have no effect.
 * `borderRadius` - Default: `false`
 * `paddingLeft`, `paddingRight`, `paddingTop`, and `paddingBottom` - Default: `false` (all of them default to `false`)
 
+## Events. What they do and how to use them
 
+Each Canvas Text Input broacasts its own events which tell you what it's doing and when, and allows you to write code that reacts to what it's doing. For example, processing user input when the user presses the `enter` key.
 
+To listen for an event, simply assign a function to the name of the event you want to listen for. As an example, let's print out `"I was clicked!"` when the user clicks our Canvas Text Input. This code would accomplish that for us:
+```
+nameOfTextInput.onselect = () => {
+	console.log("I was clicked!");
+};
+```
+The `onselect` function will automatically be run one time every time the Canvas Text Input is selected.
 
+Some events automatically provide extra data about the event. For example `onkeypress` will pass along a string containing the key that was pressed, and `onpaste` will pass along a boolean saying whether or not the paste was successful for if the user blocked access to the clipboard. This data can be easily collected by simply giving it a name. For example:
+```
+nameOfTextInput.onkeypress = e => {
+	console.log(e);
+};
+```
+This will print out every keystroke that the user makes inside the text input to the console.
 
+### Full list of all events
 
-
-
-
-
-
-
-
-
-
+`onselect` - Executes one time when the user selects the Canvas Text Input for the first time. Only executes again when the user unselects and reselects the Canvas Text Input.
+`onunselect` - Executes a single time when the user unselects the Canvas Text Input. Exactly the opposite of `onselect`
+`onkeypress` - Passes along a string containing the key that was pressed - Executes once every time the user presses a key while the Canvas Text Input is selected
+`onkeyrelease` - Passes along a string containing the key that was released - Executes once every time the user releases a key while the Canvas Text Input is selected
+`onenter` - Excutes a single time every time the user presses the `enter` key while the Canvas Text Input is selected.
+`oncopy` - Executes a single time every time the user uses `ctrl + C` or `ctrl + X` to attempt copying/cutting text out of the Canvas Text Input.
+`onpaste` - Passes along a boolean containing `true` if the clipboard read was successful and `false` if it was blocked by the browser - Executes a single time when the user uses `ctrl + V` to attempt pasting text into the Canvas Text Input.
