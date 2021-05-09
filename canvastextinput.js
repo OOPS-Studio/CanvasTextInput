@@ -146,8 +146,8 @@ class TextInput{
             TextInput.mouseMoved = true;
         });
         
-        canvas.addEventListener("mousemove",e => {
-            let rect = e.target.getBoundingClientRect();
+        document.addEventListener("mousemove",e => {
+            let rect = canvas.getBoundingClientRect();
             this.mouseX = Math.round(e.clientX - rect.left)
             this.mouseY = Math.round(e.clientY - rect.top);
         });
