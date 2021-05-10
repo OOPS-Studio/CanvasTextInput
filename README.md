@@ -23,7 +23,7 @@ Once you have Canvas Text Input imported, you can get a simple demo running like
         <title>Canvas Text Input Demo</title>
     </head>
     <body>
-        <script src="textinput.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/OOPS-Studio/CanvasTextInput/canvastextinput.min.js"></script>
         
         <canvas id = "output-canvas" width = "250" height = "120"></canvas>
         
