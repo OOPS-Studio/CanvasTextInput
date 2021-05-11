@@ -2,11 +2,11 @@
 
 Canvas Text Input is a library that allows you to quickly and easily create text input boxes inside of an HTML canvas element. I recently had a great need for a tool like this and realized that it didn't exist, so I created my own and felt that I should share it so that others could find use for it too and not have to create it from scratch like I did.
 
-There was a library by Goldfire which attempted to accomplish the same thing my library does, called CanvasInput. His does have more features than mine (such as tabbing through input boxes), but for one reason or another his has a terrible flicker constantly while you use it, and it also runs at about 1-2 frames per second on my machine, causing it to miss over half of the inputted characters. Additionally, the scrolling on his looks terrible (the text moves back and forth contantly while typing), selecting one of his input elements causes the page to automatically scroll it off the bottom so that you can't even see what you're typing, and his doesn't have any support for arrow keys. (If you go to his GitHub Repo you can see a list of 26 different known issues and bugs which are _still open,_ meaning that they are yet to be resolved after 4 years) Overall, it's a cool idea, but it's incredibly unuseable and outdated. Mine, on the other hand, has less fancy features and overall worse-looking styling, but it works much much better and never misses any input, runs at a completely consistent frame rate, doesn't ever flicker a single time, scrolls smoothly, consistently, and nicely, and is overall much more reliable than Goldfire's. Mine is certainly ready for use in production, and placing it side-by-side with an actual input element you can hardly tell any difference. Overall I'm very happy with it and I hope you will be too. Please give it a try!
+There was a library by Goldfire which attempted to accomplish the same thing my library does, called CanvasInput. His does have more features than mine (such as tabbing through input boxes), but for one reason or another his has a terrible flicker constantly while you use it, and it also runs at about 1-2 frames per second on my machine, causing it to miss over half of the inputted characters. Additionally, the scrolling on his looks terrible (the text moves back and forth constantly while typing), selecting one of his input elements causes the page to automatically scroll it off the bottom so that you can't even see what you're typing, and his doesn't have any support for arrow keys. (If you go to his GitHub repo you can see a list of 26 different known issues and bugs which are _still open,_ meaning that they are yet to be resolved after 4 years) Overall, it's a cool idea, but it's incredibly unuseable and outdated. Mine, on the other hand, has less fancy features and overall worse-looking styling, but it works much much better and never misses any input, runs at a completely consistent frame rate, doesn't ever flicker a single time, scrolls smoothly, consistently, and nicely, and is overall much more reliable than Goldfire's. Mine is certainly ready for use in production, and placing it side-by-side with an actual input element you can hardly tell any difference. Overall I'm very happy with it and I hope you will be too. Please give it a try!
 
-## Getting setup
+## Getting set up
 
-Getting CanvasTextInput setup in your project is incredibly simple. The entire library exists inside of [one single file](https://github.com/OOPS-Studio/CanvasTextInput/blob/main/canvastextinput.js). You're free to copy the contents of that file into a file of your own and import and use that, however you can also use JSDelivr like so:
+Getting CanvasTextInput set up in your project is incredibly simple. The entire library exists inside of [one single file](https://github.com/OOPS-Studio/CanvasTextInput/blob/main/canvastextinput.js). You're free to copy the contents of that file into a file of your own and import and use that, however you can also use JSDelivr like so:
 ```
 <script src="https://cdn.jsdelivr.net/gh/OOPS-Studio/CanvasTextInput/canvastextinput.js"></script>
 ```
@@ -51,9 +51,9 @@ Once you have Canvas Text Input imported, you can get a simple demo running like
 
 ## Feature rundow/Documentation
 
-Once you have Canvas Text Input setup in your project it's very simple to use. Let's learn the basics and then we'll get into the big list of everything that it can do.
+Once you have Canvas Text Input set up in your project it's very simple to use. Let's learn the basics and then we'll get into the big list of everything that it can do.
 
-### Setup a shell for all your inputs to run in
+### Set up a shell for all your inputs to run in
 
 Canvas Text Input requires a bit of one-time setup to make sure that it's in-sync with everything else you have going on inside your project. Let's walk through customizing Canvas Text Input to your specific project to ensure that it runs perfectly seamlessly at all times.
 
@@ -79,7 +79,7 @@ And that's it! Your Canvas Text Input is all set up and ready to be put to use.
 
 ### Create and render your first Canvas Text Input
 
-Now that you have the shell setup, you can very quickly and easily create and render new Canvas Text Inputs.
+Now that you have the shell set up, you can very quickly and easily create and render new Canvas Text Inputs.
 
 To create a new Canvas Text Input, use the `TextInput` constructor. The constructor takes in 3 required arguments and one optional requirement, like so: `new TextInput(canvas,x,y,*style)`
 * `canvas` should be a the canvas element that you want this Canvas Text Input to exist on.
