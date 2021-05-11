@@ -234,10 +234,10 @@ This will print out every keystroke that the user makes inside the text input to
 
 ### Full list of all events
 
-`onselect` - Executes one time when the user selects the Canvas Text Input for the first time. Only executes again when the user unselects and reselects the Canvas Text Input.
-`onunselect` - Executes a single time when the user unselects the Canvas Text Input. Exactly the opposite of `onselect`
-`onkeypress` - Passes along a string containing the key that was pressed - Executes once every time the user presses a key while the Canvas Text Input is selected
-`onkeyrelease` - Passes along a string containing the key that was released - Executes once every time the user releases a key while the Canvas Text Input is selected
-`onenter` - Excutes a single time every time the user presses the `enter` key while the Canvas Text Input is selected.
-`oncopy` - Executes a single time every time the user uses `ctrl + C` or `ctrl + X` to attempt copying/cutting text out of the Canvas Text Input.
-`onpaste` - Passes along a boolean containing `true` if the clipboard read was successful and `false` if it was blocked by the browser - Executes a single time when the user uses `ctrl + V` to attempt pasting text into the Canvas Text Input.
+* `onselect` - Executes one time when the user selects the Canvas Text Input for the first time. Only executes again when the user unselects and reselects the Canvas Text Input.
+* `onunselect` - Executes a single time when the user unselects the Canvas Text Input. Exactly the opposite of `onselect`
+* `onkeypress` - Passes along a string containing the key that was pressed - Executes once every time the user presses a key while the Canvas Text Input is selected
+* `onkeyrelease` - Passes along a string containing the key that was released - Executes once every time the user releases a key while the Canvas Text Input is selected
+* `onenter` - Excutes a single time every time the user presses the `enter` key while the Canvas Text Input is selected.
+* `oncopy` - Executes a single time every time the user uses `ctrl + C` or `ctrl + X` to attempt copying/cutting text out of the Canvas Text Input.
+* `onpaste` - Passes along a boolean containing `true` if the clipboard read was successful and `false` if it was blocked by the browser - Executes a single time when the user uses `ctrl + V` to attempt pasting text into the Canvas Text Input.
