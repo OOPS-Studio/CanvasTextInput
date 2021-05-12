@@ -474,10 +474,10 @@ class TextInput{
                 this.ctx.fillStyle = this.style.textColor;
             }
             if(this.highlighting && this.highlighting[0] !== this.highlighting[1]){
-                var p1 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[0] : this.highlighting[1];
-                var p2 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[1] : this.highlighting[0];
-                var textChunks = [this.value.substring(0,p1),this.value.substring(p1,p2),this.value.substring(p2,this.value.length)];
-                var highlightingX = this.ctx.measureText(textChunks[0] + textChunks[1].charAt(0)).width - this.ctx.measureText(textChunks[1].charAt(0)).width;
+                let p1 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[0] : this.highlighting[1];
+                let p2 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[1] : this.highlighting[0];
+                let textChunks = [this.value.substring(0,p1),this.value.substring(p1,p2),this.value.substring(p2,this.value.length)];
+                let highlightingX = this.ctx.measureText(textChunks[0] + textChunks[1].charAt(0)).width - this.ctx.measureText(textChunks[1].charAt(0)).width;
                 this.ctx.fillText(textChunks[0],this.x + this.textSize * 0.1 - this.scroll,this.y + this.height * 0.79);
                 this.ctx.fillText(textChunks[2],this.x + this.textSize * 0.1 + highlightingX + (this.ctx.measureText(textChunks[1] + textChunks[2].charAt(0)).width - this.ctx.measureText(textChunks[2].charAt(0)).width) - this.scroll,this.y + this.height * 0.79);
                 this.ctx.fillStyle = this.style.highlightedTextColor;
@@ -639,16 +639,22 @@ class TextInput{
         
     }
     setStyle(obj){
-        var keys = Object.keys(obj);
-        for(var i = 0;i < keys.length;i++){
+        let keys = Object.keys(obj);
+        for(let i = 0;i < keys.length;i++){
             if(keys[i] === "onSelect"){
-                var keys2 = Object.keys(obj.onSelect);
-                for(var j = 0;j < keys2.length;j++){
+                let keys2 = Object.keys(obj.onSelect);
+                for(let j = 0;j < keys2.length;j++){
                     if(keys2[j] === "padding"){
                         let cross = ["Top","Right","Bottom","Left"];
-                        for(let k = 0;k < obj.onSelect.padding.length;k++){
-                            if(obj.padding[k] !== false){
-                                this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding[k];
+                        if(typeof obj.onSelect.padding === "number"){
+                            for(let k = 0;k < 4;k++){
+                                this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding;let
+                            }
+                        }else{
+                            for(let k = 0;k < obj.onSelect.padding.length;k++){
+                                if(obj.onSelect.padding[k] !== false){
+                                    this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding[k];
+                                }
                             }
                         }
                     }
@@ -656,9 +662,15 @@ class TextInput{
                 }
             }else if(keys[i] === "padding"){
                 let cross = ["Top","Right","Bottom","Left"];
-                for(let j = 0;j < obj.padding.length;j++){
-                    if(obj.padding[j] !== false){
-                        this.style["padding" + cross[j]] = obj.padding[j];
+                if(typeof obj.padding === "number"){
+                    for(let j = 0;j < 4;j++){
+                        this.style["padding" + cross[j]] = obj.padding;
+                    }
+                }else{
+                    for(let j = 0;j < obj.padding.length;j++){
+                        if(obj.padding[j] !== false){
+                            this.style["padding" + cross[j]] = obj.padding[j];
+                        }
                     }
                 }
             }else if(typeof this.style[keys[i]] !== "undefined"){
