@@ -201,7 +201,7 @@ nameOfTextInput.setStyle({
 
 The following are all of the properites that can be passed to `onSelect`. They behave exactly the same as their counterparts above, however these only apply when the Canvas Text Input is selected.
 
-Setting any of these to `false` causes it to have no effect.
+Setting any of these to `false` causes it to have no effect. Setting any of the items in `padding` to false will cause that field to have no effect.
 
 * `backgroundColor` - Default: `false`
 * `textColor` - Default: `false`
@@ -209,6 +209,7 @@ Setting any of these to `false` causes it to have no effect.
 * `borderWidth` - Default: `2.5`
 * `borderRadius` - Default: `false`
 * `paddingLeft`, `paddingRight`, `paddingTop`, and `paddingBottom` - Default: `false` (all of them default to `false`)
+* `padding` - Default: `undefined`
 
 ### You can see a demo of some of the ways you can style your Canvas Text Inputs by going [here](http://oops-studio.com/canvastextinputdemo).
 (Please note that copying/pasting will not work on the demo site because the web browser silently blocks it. This happens because my site is served over HTTP instead of HTTPS, so your browser won't trust my site. This won't be an actual issue during production, however.)
