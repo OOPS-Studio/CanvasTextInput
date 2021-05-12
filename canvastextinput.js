@@ -639,12 +639,27 @@ class TextInput{
         
     }
     setStyle(obj){
-        let keys = Object.keys(obj);
-        for(let i = 0;i < keys.length;i++){
+        var keys = Object.keys(obj);
+        for(var i = 0;i < keys.length;i++){
             if(keys[i] === "onSelect"){
-                let keys2 = Object.keys(obj.onSelect);
-                for(let j = 0;j < keys2.length;j++){
+                var keys2 = Object.keys(obj.onSelect);
+                for(var j = 0;j < keys2.length;j++){
+                    if(keys2[j] === "padding"){
+                        let cross = ["Top","Right","Bottom","Left"];
+                        for(let k = 0;k < obj.onSelect.padding.length;k++){
+                            if(obj.padding[k] !== false){
+                                this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding[k];
+                            }
+                        }
+                    }
                     this.style.onSelect[keys2[j]] = obj.onSelect[keys2[j]];
+                }
+            }else if(keys[i] === "padding"){
+                let cross = ["Top","Right","Bottom","Left"];
+                for(let j = 0;j < obj.padding.length;j++){
+                    if(obj.padding[j] !== false){
+                        this.style["padding" + cross[j]] = obj.padding[j];
+                    }
                 }
             }else if(typeof this.style[keys[i]] !== "undefined"){
                 this.style[keys[i]] = obj[keys[i]];
