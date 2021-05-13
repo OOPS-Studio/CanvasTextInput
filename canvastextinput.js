@@ -12,7 +12,7 @@ class TextInput{
         TextInput.frameCounter++;
     }
     static frameCounter = 0;
-    static IGNORE_LIST = ["Control","Alt","Shift","Enter","Escape","CapsLock","Meta","PageUp","PageDown","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Home","End","Insert","Tab"];
+    static IGNORE_LIST = ["Control","Alt","Shift","Enter","Escape","CapsLock","Meta","PageUp","PageDown","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Home","End","Insert","Tab","AudioVolumeDown","AudioVolumeUp","AudioVolumeMute"];
     static restrain(val,min,max){
         return(val < min ? min : (val > max ? max : val));
     }
@@ -97,7 +97,8 @@ class TextInput{
                 paddingLeft: false,
                 paddingRight: false,
                 paddingTop: false,
-                paddingBottom: false
+                paddingBottom: false,
+                placeholderColor: false
             }
         };
         
@@ -136,8 +137,89 @@ class TextInput{
             if(this.processingPaste){
                 return;
             }
-            TextInput.mouseClicked = true;
-            TextInput.mousePressed = true;
+            if(e.detail === 2 && this.selected){
+                let mouseIndex = 0;
+                this.ctx.save();
+                this.ctx.font = this.textSize + "px sans-serif";
+                let w = this.ctx.measureText(this.value).width;
+                let xin = (this.mouseX - this.x - this.textSize * 0.1) + this.scroll;
+                if(xin > w){
+                    mouseIndex = this.value.length;
+                }else if(xin <= this.ctx.measureText(this.value.charAt(0)).width / 2){
+                    mouseIndex = 0;
+                }else{
+                    let checking = 0;
+                    let direction = undefined;
+                    let looking = true;
+                    while(looking){
+                        let w = this.ctx.measureText(this.value.substring(0,checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
+                        if(w < xin){
+                            if(direction === false){
+                                looking = false;
+                                continue;
+                            }
+                            direction = true;
+                            checking++;
+                        }else{
+                            if(direction === true){
+                                looking = false;
+                                continue;
+                            }
+                            direction = false;
+                            checking--;
+                        }
+                    }
+                    mouseIndex = checking;
+                }
+                this.highlighting = [];
+                let alphabet = "abcdefghijklmnopqrstuvwxyz-'";
+                let startingCharacter = this.value.charAt(mouseIndex).toLowerCase();
+                console.log(startingCharacter);
+                let val = this.value.toLowerCase();
+                let type = alphabet.indexOf(startingCharacter) !== -1 ? 0 : (startingCharacter === " " ? 1 : 2);
+                if(mouseIndex === val.length){
+                    mouseIndex--;
+                    startingCharacter = this.value.charAt(mouseIndex).toLowerCase();
+                    type = alphabet.indexOf(startingCharacter) !== -1 ? 0 : (startingCharacter === " " ? 1 : 2);
+                }else if(mouseIndex === 0){
+                    mouseIndex++;
+                    startingCharacter = this.value.charAt(mouseIndex).toLowerCase();
+                    type = alphabet.indexOf(startingCharacter) !== -1 ? 0 : (startingCharacter === " " ? 1 : 2);
+                }
+                for(let i = mouseIndex - 1;i >= 0;i--){
+                    if(i === 0){
+                        this.highlighting[0] = 0;
+                        break;
+                    }
+                    if((alphabet.indexOf(val.charAt(i).toLowerCase()) !== -1 ? 0 : (val.charAt(i) === " " ? 1 : 2)) !== type){
+                        this.highlighting[0] = i + 1;
+                        break;
+                    }
+                }
+                if(mouseIndex < val.length){
+                    for(let i = mouseIndex + 1;i < val.length + 1;i++){
+                        if(i === val.length){
+                            this.highlighting[1] = val.length;
+                            break;
+                        }
+                        if((alphabet.indexOf(val.charAt(i).toLowerCase()) !== -1 ? 0 : (val.charAt(i) === " " ? 1 : 2)) !== type){
+                            this.highlighting[1] = i;
+                            break;
+                        }
+                    }
+                }else{
+                    this.highlighting[1] = val.length;
+                }
+                console.log(this.highlighting);
+                this.ctx.restore();
+            }else if(e.detail === 3 && this.selected){
+                this.highlighting = [0,this.value.length];
+                this.arrowKeyHighlightingOrigin = [0,this.value.length];
+            }
+            if(e.detail === 1){
+                TextInput.mouseClicked = true;
+                TextInput.mousePressed = true;
+            }
         });
         document.addEventListener("mouseup",e => {
             TextInput.mousePressed = false;
@@ -465,7 +547,11 @@ class TextInput{
             }
         }
         if(this.value === ""){
-            this.ctx.fillStyle = this.style.placeholderColor;
+            if(!this.selected){
+                this.ctx.fillStyle = this.style.placeholderColor;
+            }else{
+                this.ctx.fillStyle = this.solveSelectedStyle("placeholderColor");
+            }
             this.ctx.fillText(this.placeholder,this.x + this.textSize * 0.1,this.y + this.height * 0.79);
         }else{
             if(this.selected){
@@ -488,10 +574,10 @@ class TextInput{
         }
         if(this.selected && !this.highlighting){
             this.blinkCounter++;
-            if(this.blinkCounter > 100){
+            if(this.blinkCounter > 80){
                 this.blinkCounter = 0;
             }
-            if(this.blinkCounter < 50){
+            if(this.blinkCounter < 40){
                 if(this.selected){
                     this.ctx.strokeStyle = this.solveSelectedStyle("textColor");
                 }else{
@@ -640,15 +726,15 @@ class TextInput{
     }
     setStyle(obj){
         let keys = Object.keys(obj);
+        let cross = ["Top","Right","Bottom","Left"];
         for(let i = 0;i < keys.length;i++){
             if(keys[i] === "onSelect"){
                 let keys2 = Object.keys(obj.onSelect);
                 for(let j = 0;j < keys2.length;j++){
                     if(keys2[j] === "padding"){
-                        let cross = ["Top","Right","Bottom","Left"];
                         if(typeof obj.onSelect.padding === "number"){
                             for(let k = 0;k < 4;k++){
-                                this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding;let
+                                this.style.onSelect["padding" + cross[k]] = obj.onSelect.padding;
                             }
                         }else{
                             for(let k = 0;k < obj.onSelect.padding.length;k++){
@@ -661,7 +747,6 @@ class TextInput{
                     this.style.onSelect[keys2[j]] = obj.onSelect[keys2[j]];
                 }
             }else if(keys[i] === "padding"){
-                let cross = ["Top","Right","Bottom","Left"];
                 if(typeof obj.padding === "number"){
                     for(let j = 0;j < 4;j++){
                         this.style["padding" + cross[j]] = obj.padding;
