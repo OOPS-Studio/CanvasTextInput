@@ -196,6 +196,7 @@ nameOfTextInput.setStyle({
 * `highlightedTextColor` - Default: `"white"` - The color of the text being highlighted. Defaults to white to provide high contrast with the blue background.
 * `paddingLeft`, `paddingRight`, `paddingTop`, and `paddingBottom` - Default: `0` (all of them default to 0) - The amount of padding (in pixels) that will be between the border of the Canvas Text Input box and the text inside it. One value for each side. (Each one can be set to any number, and you can specify any amount of them without affecting the others.)
 * `padding` - Default: `undefined` - Shorthand for defining the padding of your Canvas Text Input. If passed a single number, will apply it to all sides. If passed an array, will assign each value in the order of `top, right, bottom, left`. So `padding: [10,5,15,20]` would be equivilant to `paddingTop: 10,paddingRight: 5,paddingBottom: 15,paddingLeft: 20` and `padding: 10` would be equivilant to `paddingTop: 10,paddingRight: 10,paddingBottom: 10,paddingLeft: 10`
+* `textSize` - Default: `15` - Sets the size in pixels of the text iniside the Canvas Text Input. This also applies to placeholders.
 
 #### Styling properties that can be passed into `onSelect`
 
