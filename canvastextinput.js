@@ -88,6 +88,7 @@ class TextInput{
             paddingTop: 0,
             paddingBottom: 0,
             highlightedTextColor: "white",
+            textSize: false,
             onSelect: {
                 backgroundColor: false,
                 textColor: false,
