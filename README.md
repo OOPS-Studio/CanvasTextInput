@@ -214,7 +214,7 @@ Setting any of these to `false` causes it to have no effect. Setting any of the 
 * `placeholderColor` - Default: `false`
 
 ### You can see a demo of some of the ways you can style your Canvas Text Inputs by going [here](https://oops-studio.com/canvastextinputdemo).
-(Please note that copying/pasting will not work on the demo site because the web browser silently blocks it. This happens because my site is served over HTTP instead of HTTPS, so your browser won't trust my site. This won't be an actual issue during production, however.)
+(If you try to paste text using `ctrl + V` then you will need to give the page permission to read data from your clipboard.)
 
 ## Events. What they do and how to use them
 
