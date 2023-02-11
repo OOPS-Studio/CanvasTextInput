@@ -131,7 +131,7 @@ A placeholder is a small peice of text that displays when the Canvas Text Input 
 
 To do so, simply set `highlightAllTextWhenSelected` to `true`. This can be done directly (`nameOfTextInput.highlightAllTextWhenSelected = true;`) or via the styling object. Again, the choice is yours.
 
-When set to true it will cause all text inside to be highlighted when the user clicks inside the Canvas Text Input. When set to false it will cause a insert bar to appear instead. Default is `false`.
+When set to true it will cause all text inside to be highlighted when the user clicks inside the Canvas Text Input. When set to false it will cause an insert bar to appear instead. Default is `false`.
 
 # Full documentation
 
@@ -213,7 +213,7 @@ Setting any of these to `false` causes it to have no effect. Setting any of the 
 * `padding` - Default: `undefined`
 * `placeholderColor` - Default: `false`
 
-### You can see a demo of some of the ways you can style your Canvas Text Inputs by going [here](http://oops-studio.com/canvastextinputdemo).
+### You can see a demo of some of the ways you can style your Canvas Text Inputs by going [here](https://oops-studio.com/canvastextinputdemo).
 (Please note that copying/pasting will not work on the demo site because the web browser silently blocks it. This happens because my site is served over HTTP instead of HTTPS, so your browser won't trust my site. This won't be an actual issue during production, however.)
 
 ## Events. What they do and how to use them
