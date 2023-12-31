@@ -3,7 +3,8 @@ class TextInput{
     static mousePressed = false;
     static mouseMoved = false;
     static holdingShift = false;
-    static holdingControl = false;
+	static holdingControl = false;
+	static holdingMeta = false;
     static requestingHover = false;
     static nextFrame(){
         TextInput.requestingHover = false;
@@ -11,41 +12,41 @@ class TextInput{
         TextInput.mouseMoved = false;
         TextInput.frameCounter++;
     }
-    static frameCounter = 0;
-    static IGNORE_LIST = ["Control","Alt","Shift","Enter","Escape","CapsLock","Meta","PageUp","PageDown","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Home","End","Insert","Tab","AudioVolumeDown","AudioVolumeUp","AudioVolumeMute"];
-    static restrain(val,min,max){
+	static frameCounter = 0;
+	static ACCEPT_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()`~-_=+[{]}\\|;:'\",<.>/? ".split("");
+    static restrain(val, min, max){
         return(val < min ? min : (val > max ? max : val));
     }
-    static roundedRect(ctx,x,y,w,h,r1,r2,r3,r4){
+    static roundedRect(ctx, x, y, w, h, r1, r2, r3, r4){
         if(typeof r2 === "undefined"){
             r2 = r1;
             r3 = r1;
             r4 = r1;
         }
         if(h < w){
-            r1 = TextInput.restrain(r1,0,h / 2);
-            r2 = TextInput.restrain(r2,0,h / 2);
-            r3 = TextInput.restrain(r3,0,h / 2);
-            r4 = TextInput.restrain(r4,0,h / 2);
+            r1 = TextInput.restrain(r1, 0, h / 2);
+            r2 = TextInput.restrain(r2, 0, h / 2);
+            r3 = TextInput.restrain(r3, 0, h / 2);
+            r4 = TextInput.restrain(r4, 0, h / 2);
         }else{
-            r1 = TextInput.restrain(r1,0,w / 2);
-            r2 = TextInput.restrain(r2,0,w / 2);
-            r3 = TextInput.restrain(r3,0,w / 2);
-            r4 = TextInput.restrain(r4,0,w / 2);
+            r1 = TextInput.restrain(r1, 0, w / 2);
+            r2 = TextInput.restrain(r2, 0, w / 2);
+            r3 = TextInput.restrain(r3, 0, w / 2);
+            r4 = TextInput.restrain(r4, 0, w / 2);
         }
         ctx.beginPath();
-        ctx.moveTo(x + r1,y);
-        ctx.lineTo(x + w - r2,y);
-        ctx.arcTo(x + w,y,x + w,y + r2,r2);
-        ctx.lineTo(x + w,y + h - r3);
-        ctx.arcTo(x + w,y + h,x + w - r3,y + h,r3);
-        ctx.lineTo(x + r4,y + h);
-        ctx.arcTo(x,y + h,x,y + h - r4,r4);
-        ctx.lineTo(x,y + r1);
-        ctx.arcTo(x,y,x + r1,y,r1);
+        ctx.moveTo(x + r1, y);
+        ctx.lineTo(x + w - r2, y);
+        ctx.arcTo(x + w, y, x + w, y + r2, r2);
+        ctx.lineTo(x + w, y + h - r3);
+        ctx.arcTo(x + w, y + h, x + w - r3, y + h, r3);
+        ctx.lineTo(x + r4, y + h);
+        ctx.arcTo(x, y + h, x, y + h - r4, r4);
+        ctx.lineTo(x, y + r1);
+        ctx.arcTo(x, y, x + r1, y, r1);
         ctx.closePath();
     }
-    constructor(canvas,x,y,style = {}){
+    constructor(canvas, x, y, style = {}){
         this.ctx = canvas.getContext("2d");
         
         this.x = x;
@@ -81,8 +82,8 @@ class TextInput{
             borderColor: "black",
             borderWidth: 2,
             borderRadius: 0,
-            placeholderColor: "rgba(0,0,0,0.65)",
-            highlightColor: "rgb(60,100,255)",
+            placeholderColor: "rgba(0, 0, 0, 0.65)",
+            highlightColor: "rgb(60, 100, 255)",
             paddingLeft: 0,
             paddingRight: 0,
             paddingTop: 0,
@@ -91,7 +92,7 @@ class TextInput{
             onSelect: {
                 backgroundColor: false,
                 textColor: false,
-                borderColor: "rgb(0,150,255)",
+                borderColor: "rgb(0, 150, 255)",
                 borderWidth: 2.5,
                 borderRadius: false,
                 paddingLeft: false,
@@ -104,13 +105,14 @@ class TextInput{
         
         this.setStyle(style);
         
-        document.addEventListener("keydown",e => {
+        document.addEventListener("keydown", e => {
             if(e.key === "Shift"){
                 TextInput.holdingShift = true;
-            }
+			}
             if(e.key === "Control"){
                 TextInput.holdingControl = true;
-            }
+			}
+			TextInput.holdingMeta = e.metaKey;
             if(this.processingPaste || this.lastRendered < TextInput.frameCounter - 1){
                 return;
             }
@@ -120,10 +122,10 @@ class TextInput{
                 e.preventDefault();
             }
         });
-        document.addEventListener("keyup",e => {
+        document.addEventListener("keyup", e => {
             if(e.key === "Shift"){
                 TextInput.holdingShift = false;
-            }
+			}
             if(e.key === "Control"){
                 TextInput.holdingControl = false;
             }
@@ -131,7 +133,7 @@ class TextInput{
                 this.onkeyrelease(e.key);
             }
         });
-        document.addEventListener("mousedown",e => {
+        document.addEventListener("mousedown", e => {
             if(this.processingPaste){
                 return;
             }
@@ -150,7 +152,7 @@ class TextInput{
                     let direction = undefined;
                     let looking = true;
                     while(looking){
-                        let w = this.ctx.measureText(this.value.substring(0,checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
+                        let w = this.ctx.measureText(this.value.substring(0, checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
                         if(w < xin){
                             if(direction === false){
                                 looking = false;
@@ -209,32 +211,33 @@ class TextInput{
                 }
                 this.ctx.restore();
             }else if(e.detail === 3 && this.selected){
-                this.highlighting = [0,this.value.length];
-                this.arrowKeyHighlightingOrigin = [0,this.value.length];
+                this.highlighting = [0, this.value.length];
+                this.arrowKeyHighlightingOrigin = [0, this.value.length];
             }
             if(e.detail === 1){
                 TextInput.mouseClicked = true;
                 TextInput.mousePressed = true;
             }
         });
-        document.addEventListener("mouseup",e => {
+        document.addEventListener("mouseup", e => {
             TextInput.mousePressed = false;
         });
-        document.addEventListener("mousemove",e => {
+        document.addEventListener("mousemove", e => {
             if(this.processingPaste){
                 return;
             }
             TextInput.mouseMoved = true;
         });
         
-        document.addEventListener("mousemove",e => {
+        document.addEventListener("mousemove", e => {
             let rect = canvas.getBoundingClientRect();
             this.mouseX = Math.round(e.clientX - rect.left)
             this.mouseY = Math.round(e.clientY - rect.top);
         });
         
-        document.addEventListener("visibilitychange",e => {
-            TextInput.holdingControl = false;
+        document.addEventListener("visibilitychange", e => {
+			TextInput.holdingControl = false;
+			TextInput.holdingMeta = false;
             TextInput.holdingShift = false;
             TextInput.mousePressed = false;
         });
@@ -246,7 +249,7 @@ class TextInput{
             this.undoneValue = false;
         }
         this.undoIndex++;
-        this.undos.push({value: this.value,insertingAt: this.highlighting ? this.highlighting : this.insertingAt});
+        this.undos.push({value: this.value, insertingAt: this.highlighting ? this.highlighting : this.insertingAt});
         if(this.undos.length > 100){
             this.undos.shift();
             this.undoIndex--;
@@ -259,7 +262,7 @@ class TextInput{
         }
         this.undoIndex--;
         if(!this.undoneValue){
-            this.undoneValue = {value: this.value,insertingAt: this.highlighting ? this.highlighting : this.insertingAt};
+            this.undoneValue = {value: this.value, insertingAt: this.highlighting ? this.highlighting : this.insertingAt};
         }
         this.value = this.undos[this.undoIndex].value;
         if(typeof this.undos[this.undoIndex].insertingAt === "number"){
@@ -298,23 +301,23 @@ class TextInput{
                 this.blinkCounter = 0;
                 if(!this.highlighting){
                     if(this.insertingAt > 0){
-                        this.setValue(this.value.substring(0,this.insertingAt - 1) + this.value.substring(this.insertingAt,this.value.length));
+                        this.setValue(this.value.substring(0, this.insertingAt - 1) + this.value.substring(this.insertingAt, this.value.length));
                         this.insertingAt--;
                     }
                 }else{
                     this.insertingAt = this.highlighting[0];
-                    this.setValue(this.value.substring(0,this.highlighting[0]) + this.value.substring(this.highlighting[1],this.value.length));
+                    this.setValue(this.value.substring(0, this.highlighting[0]) + this.value.substring(this.highlighting[1], this.value.length));
                     this.highlighting = false;
                 }
             }else if(key === "Delete"){
                 this.blinkCounter = 0;
                 if(!this.highlighting){
                     if(this.insertingAt < this.value.length){
-                        this.setValue(this.value.substring(0,this.insertingAt) + this.value.substring(this.insertingAt + 1,this.value.length));
+                        this.setValue(this.value.substring(0, this.insertingAt) + this.value.substring(this.insertingAt + 1, this.value.length));
                     }
                 }else{
                     this.insertingAt = this.highlighting[0];
-                    this.setValue(this.value.substring(0,this.highlighting[0]) + this.value.substring(this.highlighting[1],this.value.length));
+                    this.setValue(this.value.substring(0, this.highlighting[0]) + this.value.substring(this.highlighting[1], this.value.length));
                     this.highlighting = false;
                 }
             }else if(key === "Enter"){
@@ -330,16 +333,16 @@ class TextInput{
                         this.highlighting = false;
                     }
                 }else if(TextInput.holdingShift && this.insertingAt > 0){
-                    this.highlighting = [this.insertingAt - 1,this.insertingAt];
-                    this.arrowKeyHighlightingOrigin = [this.insertingAt,this.insertingAt - 1];
+                    this.highlighting = [this.insertingAt - 1, this.insertingAt];
+                    this.arrowKeyHighlightingOrigin = [this.insertingAt, this.insertingAt - 1];
                 }else if(this.insertingAt > 0){
                     this.insertingAt--;
                 }
                 if(this.highlighting){
                     if(this.arrowKeyHighlightingOrigin[1] < this.arrowKeyHighlightingOrigin[0]){
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[1],this.arrowKeyHighlightingOrigin[0]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[1], this.arrowKeyHighlightingOrigin[0]];
                     }else{
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[0],this.arrowKeyHighlightingOrigin[1]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[0], this.arrowKeyHighlightingOrigin[1]];
                     }
                 }
                 this.blinkCounter = 0;
@@ -354,16 +357,16 @@ class TextInput{
                         this.highlighting = false;
                     }
                 }else if(TextInput.holdingShift && this.insertingAt < this.value.length){
-                    this.highlighting = [this.insertingAt,this.insertingAt + 1];
-                    this.arrowKeyHighlightingOrigin = [this.insertingAt,this.insertingAt + 1];
+                    this.highlighting = [this.insertingAt, this.insertingAt + 1];
+                    this.arrowKeyHighlightingOrigin = [this.insertingAt, this.insertingAt + 1];
                 }else if(this.insertingAt < this.value.length){
                     this.insertingAt++;
                 }
                 if(this.highlighting){
                     if(this.arrowKeyHighlightingOrigin[1] < this.arrowKeyHighlightingOrigin[0]){
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[1],this.arrowKeyHighlightingOrigin[0]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[1], this.arrowKeyHighlightingOrigin[0]];
                     }else{
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[0],this.arrowKeyHighlightingOrigin[1]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[0], this.arrowKeyHighlightingOrigin[1]];
                     }
                 }
                 this.blinkCounter = 0;
@@ -376,16 +379,16 @@ class TextInput{
                         this.highlighting = false;
                     }
                 }else if(TextInput.holdingShift){
-                    this.highlighting = [0,this.insertingAt];
-                    this.arrowKeyHighlightingOrigin = [this.insertingAt,0];
+                    this.highlighting = [0, this.insertingAt];
+                    this.arrowKeyHighlightingOrigin = [this.insertingAt, 0];
                 }else{
                     this.insertingAt = 0;
                 }
                 if(this.highlighting){
                     if(this.arrowKeyHighlightingOrigin[1] < this.arrowKeyHighlightingOrigin[0]){
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[1],this.arrowKeyHighlightingOrigin[0]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[1], this.arrowKeyHighlightingOrigin[0]];
                     }else{
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[0],this.arrowKeyHighlightingOrigin[1]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[0], this.arrowKeyHighlightingOrigin[1]];
                     }
                 }
                 this.blinkCounter = 0;
@@ -398,45 +401,45 @@ class TextInput{
                         this.highlighting = false;
                     }
                 }else if(TextInput.holdingShift){
-                    this.highlighting = [this.insertingAt,this.value.length];
-                    this.arrowKeyHighlightingOrigin = [this.insertingAt,this.value.length];
+                    this.highlighting = [this.insertingAt, this.value.length];
+                    this.arrowKeyHighlightingOrigin = [this.insertingAt, this.value.length];
                 }else{
                     this.insertingAt = this.value.length;
                 }
                 if(this.highlighting){
                     if(this.arrowKeyHighlightingOrigin[1] < this.arrowKeyHighlightingOrigin[0]){
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[1],this.arrowKeyHighlightingOrigin[0]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[1], this.arrowKeyHighlightingOrigin[0]];
                     }else{
-                        this.highlighting = [this.arrowKeyHighlightingOrigin[0],this.arrowKeyHighlightingOrigin[1]];
+                        this.highlighting = [this.arrowKeyHighlightingOrigin[0], this.arrowKeyHighlightingOrigin[1]];
                     }
                 }
                 this.blinkCounter = 0;
-            }else if(TextInput.IGNORE_LIST.indexOf(key) === -1){
-                if(TextInput.holdingControl){
+            }else if(TextInput.ACCEPT_LIST.indexOf(key) !== -1){
+                if(TextInput.holdingControl || TextInput.holdingMeta){
                     if(key === "a"){
-                        this.highlighting = [0,this.value.length];
-                        this.arrowKeyHighlightingOrigin = [0,this.value.length];
+                        this.highlighting = [0, this.value.length];
+                        this.arrowKeyHighlightingOrigin = [0, this.value.length];
                     }else if(key === "c" && this.highlighting){
-                        navigator.clipboard.writeText(this.value.substring(this.highlighting[0],this.highlighting[1]));
+                        navigator.clipboard.writeText(this.value.substring(this.highlighting[0], this.highlighting[1]));
                         this.oncopy();
                     }else if(key === "x" && this.highlighting){
-                        navigator.clipboard.writeText(this.value.substring(this.highlighting[0],this.highlighting[1]));
+                        navigator.clipboard.writeText(this.value.substring(this.highlighting[0], this.highlighting[1]));
                         this.insertingAt = this.highlighting[0];
-                        this.setValue(this.value.substring(0,this.highlighting[0]) + this.value.substring(this.highlighting[1],this.value.length));
+                        this.setValue(this.value.substring(0, this.highlighting[0]) + this.value.substring(this.highlighting[1], this.value.length));
                         this.highlighting = false;
                         this.oncopy();
                     }else if(key === "v"){
                         navigator.clipboard.readText().then(text => {
                             if(this.highlighting){
-                                this.setValue(this.value.substring(0,this.highlighting[0]) + this.value.substring(this.highlighting[1],this.value.length));
+                                this.setValue(this.value.substring(0, this.highlighting[0]) + this.value.substring(this.highlighting[1], this.value.length));
                                 this.insertingAt = this.highlighting[0];
                                 this.highlighting = false;
                             }
-                            this.value = this.value.substring(0,this.insertingAt) + text + this.value.substring(this.insertingAt,this.value.length);
+                            this.value = this.value.substring(0, this.insertingAt) + text + this.value.substring(this.insertingAt, this.value.length);
                             this.insertingAt += text.length;
                             this.processingPaste = false;
                             this.onpaste(true);
-                        },err => {this.onpaste(false);this.processingPaste = false;});
+                        }, err => {this.onpaste(false);this.processingPaste = false;});
                         this.processingPaste = true;
                     }else if(key === "z"){
                         this.undo();
@@ -448,9 +451,9 @@ class TextInput{
                 let toSet = this.value;
                 if(this.highlighting){
                     this.insertingAt = this.highlighting[0];
-                    toSet = toSet.substring(0,this.highlighting[0]) + toSet.substring(this.highlighting[1],toSet.length);
+                    toSet = toSet.substring(0, this.highlighting[0]) + toSet.substring(this.highlighting[1], toSet.length);
                 }
-                toSet = toSet.substring(0,this.insertingAt) + key + toSet.substring(this.insertingAt,toSet.length);
+                toSet = toSet.substring(0, this.insertingAt) + key + toSet.substring(this.insertingAt, toSet.length);
                 this.insertingAt++;
                 this.setValue(toSet);
                 this.blinkCounter = 0;
@@ -472,7 +475,7 @@ class TextInput{
         this.ctx.save();
         this.ctx.font = this.textSize + "px sans-serif";
         if(!this.highlighting){
-            let insertingX = this.ctx.measureText(this.value.substring(0,this.insertingAt)).width;
+            let insertingX = this.ctx.measureText(this.value.substring(0, this.insertingAt)).width;
             let fullTextWidth = this.ctx.measureText(this.value).width;
             let rightEdge = this.width - this.textSize * 0.1;
             if(fullTextWidth < rightEdge + this.scroll){
@@ -484,7 +487,7 @@ class TextInput{
             }
         }else{
             if(TextInput.mousePressed){
-                let insertingX = this.ctx.measureText(this.value.substring(0,this.highlighting[1])).width;
+                let insertingX = this.ctx.measureText(this.value.substring(0, this.highlighting[1])).width;
                 if(this.mouseX < this.x + this.width / 2){
                     if(insertingX < this.scroll){
                         this.scroll = insertingX;
@@ -496,7 +499,7 @@ class TextInput{
                     }
                 }
             }else if(this.arrowKeyHighlightingOrigin){
-                let insertingX = this.ctx.measureText(this.value.substring(0,this.arrowKeyHighlightingOrigin[1])).width;
+                let insertingX = this.ctx.measureText(this.value.substring(0, this.arrowKeyHighlightingOrigin[1])).width;
                 if(insertingX < this.scroll){
                     this.scroll = insertingX;
                 }
@@ -517,17 +520,17 @@ class TextInput{
             this.ctx.strokeStyle = this.solveSelectedStyle("borderColor");
         }
         if(this.selected){
-            TextInput.roundedRect(this.ctx,this.x - this.solveSelectedStyle("paddingLeft"),this.y - this.solveSelectedStyle("paddingTop"),this.width + this.solveSelectedStyle("paddingLeft") + this.solveSelectedStyle("paddingRight"),this.height + this.solveSelectedStyle("paddingTop") + this.solveSelectedStyle("paddingBottom"),this.solveSelectedStyle("borderRadius"));
+            TextInput.roundedRect(this.ctx, this.x - this.solveSelectedStyle("paddingLeft"), this.y - this.solveSelectedStyle("paddingTop"), this.width + this.solveSelectedStyle("paddingLeft") + this.solveSelectedStyle("paddingRight"), this.height + this.solveSelectedStyle("paddingTop") + this.solveSelectedStyle("paddingBottom"), this.solveSelectedStyle("borderRadius"));
         }else{
-            TextInput.roundedRect(this.ctx,this.x - this.style.paddingLeft,this.y - this.style.paddingTop,this.width + this.style.paddingLeft + this.style.paddingRight,this.height + this.style.paddingTop + this.style.paddingBottom,this.style.borderRadius);
+            TextInput.roundedRect(this.ctx, this.x - this.style.paddingLeft, this.y - this.style.paddingTop, this.width + this.style.paddingLeft + this.style.paddingRight, this.height + this.style.paddingTop + this.style.paddingBottom, this.style.borderRadius);
         }
         this.ctx.stroke();
         this.ctx.fill();
         this.ctx.beginPath();
         if(this.selected){
-            TextInput.roundedRect(this.ctx,this.x - this.solveSelectedStyle("paddingLeft"),this.y - this.solveSelectedStyle("paddingTop"),this.width + this.solveSelectedStyle("paddingLeft") + this.solveSelectedStyle("paddingRight"),this.height + this.solveSelectedStyle("paddingTop") + this.solveSelectedStyle("paddingBottom"),this.solveSelectedStyle("borderRadius"));
+            TextInput.roundedRect(this.ctx, this.x - this.solveSelectedStyle("paddingLeft"), this.y - this.solveSelectedStyle("paddingTop"), this.width + this.solveSelectedStyle("paddingLeft") + this.solveSelectedStyle("paddingRight"), this.height + this.solveSelectedStyle("paddingTop") + this.solveSelectedStyle("paddingBottom"), this.solveSelectedStyle("borderRadius"));
         }else{
-            TextInput.roundedRect(this.ctx,this.x - this.style.paddingLeft,this.y - this.style.paddingTop,this.width + this.style.paddingLeft + this.style.paddingRight,this.height + this.style.paddingTop + this.style.paddingBottom,this.style.borderRadius);
+            TextInput.roundedRect(this.ctx, this.x - this.style.paddingLeft, this.y - this.style.paddingTop, this.width + this.style.paddingLeft + this.style.paddingRight, this.height + this.style.paddingTop + this.style.paddingBottom, this.style.borderRadius);
         }
         this.ctx.clip();
         if(this.highlighting){
@@ -537,9 +540,9 @@ class TextInput{
             }
             this.ctx.fillStyle = this.style.highlightColor;
             if(dir){
-                this.ctx.fillRect(this.x + this.textSize * 0.1 + (this.ctx.measureText(this.value.substring(0,this.highlighting[0] + 1)).width - this.ctx.measureText(this.value.charAt(this.highlighting[0])).width) - this.scroll,this.y,this.ctx.measureText(this.value.substring(this.highlighting[0],this.highlighting[1])).width,this.height);
+                this.ctx.fillRect(this.x + this.textSize * 0.1 + (this.ctx.measureText(this.value.substring(0, this.highlighting[0] + 1)).width - this.ctx.measureText(this.value.charAt(this.highlighting[0])).width) - this.scroll, this.y, this.ctx.measureText(this.value.substring(this.highlighting[0], this.highlighting[1])).width, this.height);
             }else{
-                this.ctx.fillRect(this.x + this.textSize * 0.1 + this.ctx.measureText(this.value.substring(0,this.highlighting[0])).width - this.scroll,this.y,-this.ctx.measureText(this.value.substring(this.highlighting[0],this.highlighting[1])).width,this.height);
+                this.ctx.fillRect(this.x + this.textSize * 0.1 + this.ctx.measureText(this.value.substring(0, this.highlighting[0])).width - this.scroll, this.y, -this.ctx.measureText(this.value.substring(this.highlighting[0], this.highlighting[1])).width, this.height);
             }
         }
         if(this.value === ""){
@@ -548,7 +551,7 @@ class TextInput{
             }else{
                 this.ctx.fillStyle = this.solveSelectedStyle("placeholderColor");
             }
-            this.ctx.fillText(this.placeholder,this.x + this.textSize * 0.1,this.y + this.height * 0.79);
+            this.ctx.fillText(this.placeholder, this.x + this.textSize * 0.1, this.y + this.height * 0.79);
         }else{
             if(this.selected){
                 this.ctx.fillStyle = this.solveSelectedStyle("textColor");
@@ -558,14 +561,14 @@ class TextInput{
             if(this.highlighting && this.highlighting[0] !== this.highlighting[1]){
                 let p1 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[0] : this.highlighting[1];
                 let p2 = this.highlighting[0] < this.highlighting[1] ? this.highlighting[1] : this.highlighting[0];
-                let textChunks = [this.value.substring(0,p1),this.value.substring(p1,p2),this.value.substring(p2,this.value.length)];
+                let textChunks = [this.value.substring(0, p1), this.value.substring(p1, p2), this.value.substring(p2, this.value.length)];
                 let highlightingX = this.ctx.measureText(textChunks[0] + textChunks[1].charAt(0)).width - this.ctx.measureText(textChunks[1].charAt(0)).width;
-                this.ctx.fillText(textChunks[0],this.x + this.textSize * 0.1 - this.scroll,this.y + this.height * 0.79);
-                this.ctx.fillText(textChunks[2],this.x + this.textSize * 0.1 + highlightingX + (this.ctx.measureText(textChunks[1] + textChunks[2].charAt(0)).width - this.ctx.measureText(textChunks[2].charAt(0)).width) - this.scroll,this.y + this.height * 0.79);
+                this.ctx.fillText(textChunks[0], this.x + this.textSize * 0.1 - this.scroll, this.y + this.height * 0.79);
+                this.ctx.fillText(textChunks[2], this.x + this.textSize * 0.1 + highlightingX + (this.ctx.measureText(textChunks[1] + textChunks[2].charAt(0)).width - this.ctx.measureText(textChunks[2].charAt(0)).width) - this.scroll, this.y + this.height * 0.79);
                 this.ctx.fillStyle = this.style.highlightedTextColor;
-                this.ctx.fillText(textChunks[1],this.x + this.textSize * 0.1 + highlightingX - this.scroll,this.y + this.height * 0.79);
+                this.ctx.fillText(textChunks[1], this.x + this.textSize * 0.1 + highlightingX - this.scroll, this.y + this.height * 0.79);
             }else{
-                this.ctx.fillText(this.value,this.x + this.textSize * 0.1 - this.scroll,this.y + this.height * 0.79);
+                this.ctx.fillText(this.value, this.x + this.textSize * 0.1 - this.scroll, this.y + this.height * 0.79);
             }
         }
         if(this.selected && !this.highlighting){
@@ -581,9 +584,9 @@ class TextInput{
                 }
                 this.ctx.lineWidth = 1;
                 this.ctx.beginPath();
-                let w = this.ctx.measureText(this.value.substring(0,this.insertingAt)).width;
-                this.ctx.moveTo(this.x + this.textSize * 0.1 + w - this.scroll,this.y + 1);
-                this.ctx.lineTo(this.x + this.textSize * 0.1 + w - this.scroll,this.y + this.height - 2);
+                let w = this.ctx.measureText(this.value.substring(0, this.insertingAt)).width;
+                this.ctx.moveTo(this.x + this.textSize * 0.1 + w - this.scroll, this.y + 1);
+                this.ctx.lineTo(this.x + this.textSize * 0.1 + w - this.scroll, this.y + this.height - 2);
                 this.ctx.stroke();
             }
         }
@@ -597,7 +600,7 @@ class TextInput{
                 this.blinkCounter = 0;
                 
                 if(!this.selected && this.highlightAllTextWhenSelected){
-                    this.highlighting = [0,this.value.length];
+                    this.highlighting = [0, this.value.length];
                     TextInput.mousePressed = false;
                 }else{
                     this.ctx.save();
@@ -613,7 +616,7 @@ class TextInput{
                         let direction = undefined;
                         let looking = true;
                         while(looking){
-                            let w = this.ctx.measureText(this.value.substring(0,checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
+                            let w = this.ctx.measureText(this.value.substring(0, checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
                             if(w < xin){
                                 if(direction === false){
                                     looking = false;
@@ -632,7 +635,7 @@ class TextInput{
                         }
                         this.insertingAt = checking;
                     }
-                    this.highlighting = [this.insertingAt,this.insertingAt];
+                    this.highlighting = [this.insertingAt, this.insertingAt];
                     this.ctx.restore();
                 }
                 this.selected = true;
@@ -662,7 +665,7 @@ class TextInput{
                 let direction = undefined;
                 let looking = true;
                 while(looking){
-                    let w = this.ctx.measureText(this.value.substring(0,checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
+                    let w = this.ctx.measureText(this.value.substring(0, checking)).width + this.ctx.measureText(this.value.charAt(checking)).width / 2;
                     if(w < xin){
                         if(direction === false){
                             looking = false;
@@ -681,7 +684,7 @@ class TextInput{
                 }
                 this.highlighting[1] = checking;
                 this.insertingAt = checking;
-                this.arrowKeyHighlightingOrigin = [this.highlighting[0],this.highlighting[1]];
+                this.arrowKeyHighlightingOrigin = [this.highlighting[0], this.highlighting[1]];
                 this.ctx.restore();
             }
         }
@@ -722,7 +725,7 @@ class TextInput{
     }
     setStyle(obj){
         let keys = Object.keys(obj);
-        let cross = ["Top","Right","Bottom","Left"];
+        let cross = ["Top", "Right", "Bottom", "Left"];
         for(let i = 0;i < keys.length;i++){
             if(keys[i] === "onSelect"){
                 let keys2 = Object.keys(obj.onSelect);
